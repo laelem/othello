@@ -9,7 +9,7 @@
       whiteTurn = document.getElementById('whiteTurn');
 
   var game = {
-    size : 4,
+    size : 8,
     nearCases : [
       {'x': -1, 'y': -1},
       {'x': -1, 'y': 0},
