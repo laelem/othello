@@ -40,6 +40,7 @@
 
     reset : function() {
       game.turn = 'black';
+      game.computerColor = 'white';
       game.points = {'black' : 2, 'white' : 2};
       gameNode.innerHTML = '';
 
@@ -70,6 +71,13 @@
     },
 
     play : function(e) {
+      game.playerTurn(e);
+      if (game.hasPossibleShot(game.turn)) {
+        game.computerTurn();
+      }
+    },
+
+    playerTurn : function(e) {
       var target = e.target, pieces;
       if (target.getAttribute('role') == 'case' && !target.firstChild) {
         var x = parseInt(target.getAttribute('data-x'), 10),
@@ -80,6 +88,12 @@
           game.endTurn();
         }
       }
+    },
+
+    computerTurn : function() {
+      var bestShot = game.bestShot(game.turn);
+      game.playShot(bestShot.target, bestShot.pieces);
+      game.endTurn();
     },
 
     findPiece : function(nearCase, x, y, dist) {
@@ -150,8 +164,41 @@
       return false;
     },
 
+    bestShot : function(color) {
+      var i, j, count, max = 0;
+      var pieces, tmpPieces, target, tmpTarget, foundCorner = false, isCorner;
+      var targets = document.querySelectorAll('[role="case"]');
+
+      for (i = 0 ; i < game.size ; i++){
+        for (j = 0 ; j < game.size ; j++){
+          tmpTarget = targets[i*game.size + j]
+          if (!tmpTarget.firstChild) {
+            tmpPieces = game.shot(j, i, color);
+            count = tmpPieces.length;
+            isCorner = game.isCorner(j, i);
+            if (count > 0 && ((foundCorner && isCorner && count > max) ||
+            (!foundCorner && (isCorner || count > max)))) {
+              max = count;
+              target = tmpTarget;
+              pieces = tmpPieces;
+              foundCorner = isCorner;
+            }
+          }
+        }
+      }
+      return {'target': target, 'pieces': pieces};
+    },
+
+    isCorner : function(x, y) {
+      if ((x == 0 && y == 0) || (x == 0 && y == game.size-1) ||
+        (x == game.size-1 && y == 0) || (x == game.size-1 && y == game.size-1)) {
+        return true;
+      }
+      return false;
+    },
+
     impossiblePlay : function() {
-      comment.innerHTML = game.turn[0].toUpperCase() + game.turn.substr(1) + ' can\'t play anything  >>';
+      comment.innerHTML = game.turn[0].toUpperCase() + game.turn.substr(1) + ' can\'t play anything &nbsp; >>';
       comment.innerHTML += '<button type="button" id="continue">Continue</button>';
       gameNode.removeEventListener('click', game.play, false);
       var continueBtn = document.getElementById('continue');
@@ -162,6 +209,9 @@
       comment.setAttribute('class', 'hide');
       game.toggleTurn();
       gameNode.addEventListener('click', game.play, false);
+      if (game.turn == game.computerColor) {
+        game.computerTurn();
+      }
     },
 
     endGame : function() {
