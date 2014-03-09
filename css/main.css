@@ -1,7 +1,59 @@
-body{
+#contain{
   width: 900px;
-  margin: 50px auto;
+  height: 100%;
+  margin: auto;
+  position: relative;
+}
+#main, .infos{
+  padding: 20px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+#main{
+  width: 500px;
+  height: 100%;
+  margin: auto;
+  padding-top: 50px;
   text-align: center;
+}
+.infos{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 200px;
+  background-color: red;
+}
+.infos.right{
+  right: 0;
+  background-image: -webkit-gradient(
+  linear,
+  left bottom,
+  right bottom,
+  color-stop(0, #333),
+  color-stop(1, #000000)
+);
+background-image: -o-linear-gradient(right, #333 0%, #000000 100%);
+background-image: -moz-linear-gradient(right, #333 0%, #000000 100%);
+background-image: -webkit-linear-gradient(right, #333 0%, #000000 100%);
+background-image: -ms-linear-gradient(right, #333 0%, #000000 100%);
+background-image: linear-gradient(to right, #333 0%, #000000 100%);
+}
+.infos.left{
+  left: 0;
+  text-align: right;
+  background-image: -webkit-gradient(
+  linear,
+  left bottom,
+  right bottom,
+  color-stop(0, #000000),
+  color-stop(1, #333)
+);
+background-image: -o-linear-gradient(right, #000000 0%, #333 100%);
+background-image: -moz-linear-gradient(right, #000000 0%, #333 100%);
+background-image: -webkit-linear-gradient(right, #000000 0%, #333 100%);
+background-image: -ms-linear-gradient(right, #000000 0%, #333 100%);
+background-image: linear-gradient(to right, #000000 0%, #333 100%);
 }
 [role="case"]{
   display: inline-block;
@@ -55,25 +107,30 @@ body{
   display: inline-block;
   background-color: white;
   color: black;
-  padding: 5px 15px;
+  width: 140px;
+  padding: 5px 0;
   margin: 0 10px;
   font-size: 20px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
   border: 3px solid white;
+  line-height: 35px;
 }
 #turns > div.active{
   border-color: red;
   color: red;
 }
 #comment{
-  margin: 20px 0 0;
-  font-size: 30px;
+  margin: 0 0 40px 0;
+  font-size: 25px;
   color: white;
 }
 .hide{
   display: none;
+}
+.hidden{
+  visibility: hidden;
 }
 #continue{
   background-color: white;
@@ -87,4 +144,10 @@ body{
 }
 #continue:hover{
   background-color: #ccc;
+}
+img{
+  vertical-align: top;
+}
+#scores{
+  font-size: 18px;
 }

@@ -5,8 +5,12 @@
   var gameNode = document.getElementById('gameboard'),
       restartBtn = document.getElementById('restart'),
       comment = document.getElementById('comment'),
+      blackLoading = document.getElementById('blackLoading'),
+      whiteLoading = document.getElementById('whiteLoading'),
       blackTurn = document.getElementById('blackTurn'),
-      whiteTurn = document.getElementById('whiteTurn');
+      whiteTurn = document.getElementById('whiteTurn'),
+      blackScore = document.getElementById('blackScore'),
+      whiteScore = document.getElementById('whiteScore');
 
   var game = {
     size : 8,
@@ -42,11 +46,14 @@
       game.turn = 'black';
       game.computerColor = 'white';
       game.points = {'black' : 2, 'white' : 2};
+      game.updateScores();
       gameNode.innerHTML = '';
 
       eval(game.oppositeTurn(game.turn) + 'Turn').removeAttribute('class');
       eval(game.turn + 'Turn').setAttribute('class', 'active');
-      comment.setAttribute('class', 'hide');
+      comment.setAttribute('class', 'hidden');
+      blackLoading.setAttribute('class', 'hide');
+      whiteLoading.setAttribute('class', 'hide');
     },
 
     createBoard : function() {
@@ -70,22 +77,26 @@
       }
     },
 
-    play : function(e) {
-      game.playerTurn(e);
-      if (game.hasPossibleShot(game.turn)) {
-        game.computerTurn();
-      }
+    updateScores : function() {
+      blackScore.innerHTML = game.points.black;
+      whiteScore.innerHTML = game.points.white;
     },
 
-    playerTurn : function(e) {
+    play : function(e) {
       var target = e.target, pieces;
+
       if (target.getAttribute('role') == 'case' && !target.firstChild) {
         var x = parseInt(target.getAttribute('data-x'), 10),
-            y = parseInt(target.getAttribute('data-y'), 10);
+            y = parseInt(target.getAttribute('data-y'), 10),
+
         pieces = game.shot(x,y);
         if (pieces.length > 0) {
           game.playShot(target, pieces);
           game.endTurn();
+          if (game.hasPossibleShot(game.turn)) {
+            eval(game.computerColor + 'Loading').removeAttribute('class');
+            setTimeout(game.computerTurn, 500);
+          }
         }
       }
     },
@@ -94,6 +105,7 @@
       var bestShot = game.bestShot(game.turn);
       game.playShot(bestShot.target, bestShot.pieces);
       game.endTurn();
+      eval(game.computerColor + 'Loading').setAttribute('class', 'hide');
     },
 
     findPiece : function(nearCase, x, y, dist) {
@@ -134,9 +146,11 @@
         pieces[i].setAttribute('data-color', game.turn);
       }
       game.points[game.turn] += count + 1;
+      game.points[game.oppositeTurn(game.turn)] -= count;
     },
 
     endTurn : function() {
+      game.updateScores();
       game.toggleTurn();
       if (!game.hasPossibleShot(game.turn)) {
         if (!game.hasPossibleShot(game.oppositeTurn(game.turn))) {
@@ -206,7 +220,7 @@
     },
 
     continueAction : function() {
-      comment.setAttribute('class', 'hide');
+      comment.setAttribute('class', 'hidden');
       game.toggleTurn();
       gameNode.addEventListener('click', game.play, false);
       if (game.turn == game.computerColor) {
