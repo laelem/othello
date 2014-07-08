@@ -1,0 +1,47 @@
+<!doctype>
+<html>
+  <head>
+    <title>Othello</title>
+    <meta name="description" content="Othello">
+    <link rel="stylesheet" href="css/reset.css" media="all">
+    <link rel="stylesheet" href="css/main.css" media="all">
+    <link rel="shortcut icon" href="favicon.ico">
+  </head>
+  <body>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+
+    <div id="contain">
+      <aside class="infos left">
+      </aside>
+
+      <section id="main">
+        <p id="comment" class="hidden">&nbsp;</p>
+
+        <aside id="turns">
+          <div id="blackTurn">
+            <img id="blackLoading" src="img/loading.gif" width="32" height="32" class="hide" />
+            Black turn
+          </div>
+          <div id="whiteTurn">
+            <img id="whiteLoading" src="img/loading.gif" width="32" height="32" class="hide" />
+            White turn
+          </div>
+        </aside>
+
+        <section id="gameboard" role="gameboard">
+        </section>
+
+      </section>
+
+      <aside class="infos right">
+        <section id="scores">
+          <p>Black score : <span id="blackScore"></span></p>
+          <p>White score : <span id="whiteScore"></span></p>
+        </section>
+        <button type="button" id="restart">Restart</button>
+      </aside>
+    </div>
+
+    <script src='js/main.js'></script>
+  </body>
+</html>
