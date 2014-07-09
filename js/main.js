@@ -115,7 +115,8 @@ var game = {
         return (c ? c.firstChild : null);
     },
 
-    shot : function(x, y, color = game.turn){
+    shot : function(x, y, color){
+        color = typeof color !== 'undefined' ? color : game.turn;
         var countNearCases = game.nearCases.length;
         var i, nearCase, dist, piece, pieces = [], tmpPieces;
 
